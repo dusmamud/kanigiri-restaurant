@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+	--font-display: "Playfair Display", "Georgia", serif;
+	--font-script: "Great Vibes", "Segoe Script", cursive;
+	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+	--color-leaf: #7a9a2e;
+	--color-leaf-dark: #5c7a1c;
+	--color-leaf-deep: #6b8e23;
+	--color-mango: #eda63f;
+	--color-mango-dark: #d98d1d;
+	--color-mango-soft: #fdf0d5;
+	--color-cocoa: #3a2113;
+	--color-cocoa-soft: #6b4a2f;
+	--color-lavender: #f4f2f8;
+	--color-lavender-deep: #e9e6f1;
+	--color-cream: #fffdf8;
+	--color-ink: #2b2118;
+	--color-muted: #6b6259;
+	--color-line: #e7e2ea;
+
+	--ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	@apply bg-white font-sans text-ink antialiased;
+	font-size: 1rem;
+}
+
+::selection {
+	background: #eda63f;
+	color: #3a2113;
+}
+
+/* One clear focus style everywhere (WCAG 2.2 AA, 3:1) */
+:focus-visible {
+	outline: 2px solid #5c7a1c;
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+/* Motion: transform + opacity only, 100–300ms, respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+.reveal {
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity 300ms var(--ease-out-expo),
+		transform 300ms var(--ease-out-expo);
+}
+.reveal.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+/* Thin scrollbar for the dish carousel (keeps the arrows the main control) */
+.no-scrollbar {
+	scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
