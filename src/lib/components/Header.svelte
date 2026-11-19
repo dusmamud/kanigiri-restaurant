@@ -2,13 +2,14 @@
 	import { Menu, Phone, ShoppingBag, X } from '@lucide/svelte';
 	import Logo from '#lib/components/Logo.svelte';
 	import { cart } from '#lib/cart.svelte.ts';
+	import { drawer } from '#lib/drawer.svelte.ts';
 	import { navLinks, site } from '#lib/data/site.ts';
 
 	let open = $state(false);
 </script>
 
 <header class="sticky top-0 z-50 border-b border-line/60 bg-lavender/90 backdrop-blur-md">
-	<div class="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+	<div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8">
 		<Logo />
 
 		<nav class="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
@@ -32,8 +33,9 @@
 				CALL: {site.phoneDisplay}
 			</a>
 
-			<a
-				href="#menu"
+			<button
+				type="button"
+				onclick={() => (drawer.open = true)}
 				class="relative flex h-11 w-11 items-center justify-center rounded-full bg-white text-cocoa shadow-sm ring-1 ring-line transition-transform duration-200 hover:scale-105"
 				aria-label={`Your order, ${cart.count} item${cart.count === 1 ? '' : 's'}, total ₹${cart.total}`}
 			>
@@ -44,13 +46,13 @@
 						>{cart.count}</span
 					>
 				{/if}
-			</a>
+			</button>
 
 			<a
-				href="#menu"
+				href="/order"
 				class="hidden h-11 items-center rounded-full bg-mango px-6 text-sm font-black tracking-wide text-cocoa uppercase shadow-sm transition-colors duration-200 hover:bg-mango-dark hover:text-white sm:flex"
 			>
-				Login
+				Order Now
 			</a>
 
 			<button

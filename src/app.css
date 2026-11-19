@@ -82,3 +82,43 @@ body {
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
 }
+
+/* Gentle float for transparent dish cutouts (transform only) */
+@keyframes float-y {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-7px);
+	}
+}
+.animate-float {
+	animation: float-y 4.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+	.animate-float {
+		animation: none;
+	}
+}
+
+/* Marquee strip (transform only, pauses on hover) */
+@keyframes marquee-x {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+.animate-marquee {
+	animation: marquee-x 28s linear infinite;
+}
+.marquee:hover .animate-marquee {
+	animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+	.animate-marquee {
+		animation: none;
+	}
+}

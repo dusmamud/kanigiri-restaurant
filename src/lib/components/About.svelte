@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Flame, Leaf, Timer } from '@lucide/svelte';
+	import Counter from '#lib/components/Counter.svelte';
 	import { site, stats } from '#lib/data/site.ts';
 </script>
 
@@ -30,18 +31,36 @@
 					Hot at your door in 30–40 minutes, or your delivery is on us.
 				</li>
 			</ul>
-			<a
-				href="#menu"
-				class="mt-8 inline-flex min-h-12 items-center rounded-full bg-cocoa px-7 text-sm font-black tracking-wider text-white uppercase shadow transition-colors duration-200 hover:bg-black"
-			>
-				See the full menu
-			</a>
+			<div class="mt-8 flex flex-wrap gap-3">
+				<a
+					href="/menu"
+					class="inline-flex min-h-12 items-center rounded-full bg-cocoa px-7 text-sm font-black tracking-wider text-white uppercase shadow transition-colors duration-200 hover:bg-black"
+				>
+					See the full menu
+				</a>
+				<a
+					href="/about"
+					class="inline-flex min-h-12 items-center rounded-full border-2 border-cocoa px-7 text-sm font-black tracking-wider text-cocoa uppercase transition-colors duration-200 hover:bg-cocoa hover:text-white"
+				>
+					Our story
+				</a>
+			</div>
 		</div>
 
 		<div class="reveal grid grid-cols-2 gap-4">
 			{#each stats as stat}
 				<div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-line">
-					<p class="font-display text-4xl font-black text-leaf-dark sm:text-5xl">{stat.value}</p>
+					<p class="font-display text-4xl font-black text-leaf-dark sm:text-5xl">
+						{#if stat.value === '4.5'}
+							<Counter value={4.5} decimals={1} />
+						{:else if stat.value === '14+'}
+							<Counter value={14} suffix="+" />
+						{:else if stat.value === '120+'}
+							<Counter value={120} suffix="+" />
+						{:else}
+							<Counter value={50} suffix="k+" />
+						{/if}
+					</p>
 					<p class="mt-1 text-sm font-semibold text-muted">{stat.label}</p>
 				</div>
 			{/each}

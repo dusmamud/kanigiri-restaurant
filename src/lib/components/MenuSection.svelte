@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Check, Plus } from '@lucide/svelte';
+	import { fade, fly } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 	import Stars from '#lib/components/Stars.svelte';
 	import { addToOrder } from '#lib/cart.svelte.ts';
 	import { inr, menuCategories, menuItems, type MenuItem } from '#lib/data/site.ts';
@@ -53,7 +55,10 @@
 		<ul class="mt-8 grid gap-4 md:grid-cols-2">
 			{#each visible as item (item.name)}
 				<li
-					class="reveal flex items-start justify-between gap-4 rounded-3xl bg-cream p-5 ring-1 ring-line transition-shadow duration-200 hover:shadow-md"
+					animate:flip={{ duration: 300 }}
+					in:fly={{ y: 16, duration: 250 }}
+					out:fade={{ duration: 150 }}
+					class="flex items-start justify-between gap-4 rounded-3xl bg-cream p-5 ring-1 ring-line transition-shadow duration-200 hover:shadow-md"
 				>
 					<div class="min-w-0">
 						<p class="flex flex-wrap items-center gap-2 font-display text-lg font-bold text-cocoa">
@@ -98,5 +103,11 @@
 				</li>
 			{/each}
 		</ul>
+
+		<p class="mt-8 text-center">
+			<a href="/menu" class="inline-flex min-h-12 items-center rounded-full bg-cocoa px-7 text-sm font-black tracking-wider text-white uppercase shadow transition-colors hover:bg-black">
+				See the full menu with search →
+			</a>
+		</p>
 	</div>
 </section>

@@ -13,10 +13,12 @@
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 	import { Phone, ShoppingBag } from '@lucide/svelte';
+	import CartDrawer from '#lib/components/CartDrawer.svelte';
 	import Header from '#lib/components/Header.svelte';
 	import Footer from '#lib/components/Footer.svelte';
 	import WhatsAppIcon from '#lib/components/WhatsAppIcon.svelte';
 	import { cart } from '#lib/cart.svelte.ts';
+	import { drawer } from '#lib/drawer.svelte.ts';
 	import { site } from '#lib/data/site.ts';
 
 	let { children } = $props();
@@ -47,6 +49,10 @@
 			closes: '22:00'
 		},
 		aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.5', reviewCount: '521' },
+		menu: `${site.url}/menu`,
+		acceptsReservations: 'True',
+		hasMap: 'https://www.google.com/maps/search/Kanigiri+Restaurant',
+		geo: { '@type': 'GeoCoordinates', latitude: 15.65, longitude: 79.35 },
 		sameAs: ['https://www.instagram.com/', 'https://www.facebook.com/']
 	};
 
@@ -159,10 +165,16 @@
 		<span class="text-[#25d366]"><WhatsAppIcon size={20} /></span>
 		WhatsApp
 	</a>
-	<a href="#menu" class="flex min-h-14 flex-col items-center justify-center gap-0.5 bg-mango text-sm font-bold text-cocoa">
+	<button
+		type="button"
+		onclick={() => (drawer.open = true)}
+		class="flex min-h-14 flex-col items-center justify-center gap-0.5 bg-mango text-sm font-bold text-cocoa"
+	>
 		<ShoppingBag size={20} aria-hidden="true" />
 		Order{#if cart.count > 0} ({cart.count}){/if}
-	</a>
+	</button>
 </nav>
 <!-- Spacer so the sticky bar never covers footer content on mobile -->
 <div class="h-14 lg:hidden" aria-hidden="true"></div>
+
+<CartDrawer bind:open={drawer.open} />

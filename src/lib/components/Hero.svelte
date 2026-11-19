@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Bike, Clock, ShieldCheck } from '@lucide/svelte';
+	import gsap from 'gsap';
+	import { SplitText } from 'gsap/SplitText';
 	import Picture from '#lib/components/Picture.svelte';
 	import Stars from '#lib/components/Stars.svelte';
 	import { addToOrder } from '#lib/cart.svelte.ts';
@@ -11,23 +13,40 @@
 		added = true;
 		window.setTimeout(() => (added = false), 2000);
 	}
+
+	// Hero headline reveal (SplitText), reduced-motion gated.
+	// NOTE: do NOT add a gsap.from() tween on #hero-dish — it also carries
+	// the .reveal class (opacity 0 -> 1 via .is-visible) plus .animate-float.
+	// GSAP's inline opacity + the CSS opacity transition fight each other
+	// and the dish stays invisible (inline style beats the stylesheet).
+	// The reveal + float classes already animate the dish entrance.
+	$effect(() => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		gsap.registerPlugin(SplitText);
+		const ctx = gsap.context(() => {
+			const split = new SplitText('#hero-title', { type: 'words' });
+			gsap.from(split.words, { y: 32, opacity: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out' });
+		});
+		return () => ctx.revert();
+	});
 </script>
 
 <section class="relative overflow-hidden bg-lavender" aria-labelledby="hero-title">
 	<div class="mx-auto grid max-w-7xl items-center gap-10 px-4 pt-10 pb-28 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:px-8 lg:pt-14 lg:pb-36">
 		<!-- Photo — the hero dish, same composition as the reference -->
-		<div class="reveal relative order-2 lg:order-1">
-			<div class="rotate-[-1.5deg]">
-				<Picture
-					name={heroDish.image}
-					alt={heroDish.alt}
-					width={1920}
-					height={1280}
-					sizes="(max-width: 1024px) 100vw, 50vw"
-					eager
-					imgClass="w-full rounded-[2rem] shadow-2xl shadow-cocoa/20"
-				/>
-			</div>
+		<div id="hero-dish" class="reveal animate-float relative order-2 lg:order-1">
+			<!-- Transparent cutout: the flat-lay floats straight on the lavender
+			     page background, like the reference — no photo card, no border. -->
+			<Picture
+				name={heroDish.image}
+				alt={heroDish.alt}
+				width={1920}
+				height={1280}
+				sizes="(max-width: 1024px) 100vw, 50vw"
+				eager
+				transparent
+				imgClass="w-full drop-shadow-2xl"
+			/>
 			<p
 				class="absolute -bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/95 py-2 pr-4 pl-2 text-xs font-bold text-cocoa shadow-lg sm:left-8"
 			>
@@ -80,12 +99,23 @@
 					{added ? '✓ Added to order' : 'Order Now'}
 				</button>
 				<a
-					href="#menu"
+					href="/menu"
 					class="flex h-13 min-h-13 items-center rounded-full border-2 border-mango bg-white/60 px-8 text-sm font-black tracking-wider text-mango-dark uppercase transition-colors duration-200 hover:bg-mango hover:text-cocoa"
 				>
 					Explore More
 				</a>
+				<a
+					href="/reservations"
+					class="flex h-13 min-h-13 items-center rounded-full bg-cocoa px-8 text-sm font-black tracking-wider text-white uppercase shadow-md transition-colors duration-200 hover:bg-black"
+				>
+					Book a Table
+				</a>
 			</div>
+
+			<p class="mt-4 flex flex-wrap items-center gap-2 text-sm font-semibold text-cocoa/80">
+				<span class="inline-block h-2.5 w-2.5 rounded-full bg-leaf" aria-hidden="true"></span>
+				Open now · Closes 10:00 PM · {site.addressShort}
+			</p>
 
 			<ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-cocoa/80">
 				<li class="flex items-center gap-2">

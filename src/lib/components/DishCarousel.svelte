@@ -60,15 +60,19 @@
 						: 'bg-mango'}"
 				>
 					<!-- Dish photo overlapping the top edge -->
-					<div class="relative mx-5 -mt-10">
-						<div class="rotate-[-2deg]">
+					<div class="relative mx-5 -mt-10 aspect-[4/3]">
+						<div class="h-full rotate-[-2deg]">
+							<!-- Transparent tray cutout: floats above the card, card colour
+							     shows through around it, like the reference. Fixed 4:3 box
+							     with object-contain keeps every card the same height. -->
 							<Picture
 								name={dish.image}
 								alt={dish.alt}
-								width={1920}
-								height={1280}
+								width={1200}
+								height={900}
 								sizes="(max-width: 640px) 86vw, (max-width: 1024px) 46vw, 31vw"
-								imgClass="aspect-[4/3] w-full rounded-2xl object-cover shadow-xl shadow-black/25"
+								transparent
+								imgClass="h-full w-full object-contain drop-shadow-xl"
 							/>
 						</div>
 						<!-- Veg / non-veg mark -->

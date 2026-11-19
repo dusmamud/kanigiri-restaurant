@@ -1,10 +1,11 @@
 // Convert PNG masters in static/images/original/ into the delivery chain:
-//   <name>-<width>.avif  (quality 50)
-//   <name>-<width>.webp  (quality 80)
-//   <name>-<width>.jpg   (quality 84) + <name>-800.jpg fallback
+//   <name>-<width>.avif  (quality 50, alpha kept)
+//   <name>-<width>.webp  (quality 80, alpha kept)
+//   <name>-<width>.jpg   (quality 84) + <name>-800.jpg fallback — opaque only
+//   <name>-<width>.png   (resized, alpha kept) — transparent only, PNG fallback
 // Widths: 480 / 800 / 1200 / 1600. Run: npm run images
-// Transparent PNG masters keep their alpha in AVIF/WebP; JPG is skipped
-// for them only if the filename ends with -transparent.
+// Transparent PNG masters (filename ends with -transparent) keep their alpha
+// in AVIF/WebP/PNG; JPG is skipped for them because JPG has no alpha.
 import { readdir, mkdir } from 'node:fs/promises';
 import { join, parse } from 'node:path';
 import sharp from 'sharp';
@@ -28,7 +29,9 @@ for (const file of files) {
 		const base = sharp(input).resize(width, null, { withoutEnlargement: true });
 		await base.clone().avif({ quality: 50 }).toFile(join(OUT.pathname, `${name}-${width}.avif`));
 		await base.clone().webp({ quality: 80 }).toFile(join(OUT.pathname, `${name}-${width}.webp`));
-		if (!transparent) {
+		if (transparent) {
+			await base.clone().png().toFile(join(OUT.pathname, `${name}-${width}.png`));
+		} else {
 			await base
 				.clone()
 				.flatten({ background: '#fdf9f4' })
@@ -36,6 +39,8 @@ for (const file of files) {
 				.toFile(join(OUT.pathname, `${name}-${width}.jpg`));
 		}
 	}
-	console.log(`✓ ${name}: avif + webp${transparent ? '' : ' + jpg'} @ ${WIDTHS.join('/')}`);
+	console.log(
+		`✓ ${name}: avif + webp${transparent ? ' + png' : ' + jpg'} @ ${WIDTHS.join('/')}`
+	);
 }
 console.log(`Done — ${files.length} master(s) converted.`);
