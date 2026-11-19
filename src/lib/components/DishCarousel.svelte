@@ -17,7 +17,7 @@
 	}
 
 	function order(dish: Dish) {
-		addToOrder(dish.name, dish.price);
+		addToOrder(dish.slug);
 		addedId = dish.id;
 		window.setTimeout(() => {
 			if (addedId === dish.id) addedId = '';
@@ -104,7 +104,9 @@
 
 					<div class="px-6 pt-10">
 						<p class="font-script text-4xl leading-none text-white/95">{dish.script}</p>
-						<h3 class="font-display text-4xl leading-tight font-black text-white">{dish.name}</h3>
+						<h3 class="font-display text-4xl leading-tight font-black text-white">
+							<a href={`/menu/${dish.slug}`} class="hover:underline">{dish.name}</a>
+						</h3>
 						<p class="mt-3 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5">
 							<Stars rating={dish.rating} size={13} />
 							<span class="text-sm font-black text-cocoa">{dish.rating.toFixed(1)}</span>
@@ -117,7 +119,7 @@
 							<button
 								type="button"
 								onclick={() => order(dish)}
-								class="flex min-h-11 items-center gap-2 rounded-full bg-cocoa px-6 text-xs font-black tracking-wider text-white uppercase shadow transition-all duration-200 hover:bg-black active:scale-95"
+								class="flex min-h-12 items-center gap-2 rounded-full bg-cocoa px-6 text-xs font-black tracking-wider text-white uppercase shadow transition-all duration-200 hover:bg-black active:scale-95"
 							>
 								{#if addedId === dish.id}
 									<Check size={15} aria-hidden="true" /> Added
@@ -138,7 +140,7 @@
 				type="button"
 				onclick={() => scrollByCard(-1)}
 				aria-label="Previous dishes"
-				class="flex h-11 w-11 items-center justify-center rounded-full bg-[#e9e7ec] text-cocoa"
+				class="flex h-12 w-12 items-center justify-center rounded-full bg-[#e9e7ec] text-cocoa"
 			>
 				<ChevronLeft size={20} aria-hidden="true" />
 			</button>
@@ -146,7 +148,7 @@
 				type="button"
 				onclick={() => scrollByCard(1)}
 				aria-label="Next dishes"
-				class="flex h-11 w-11 items-center justify-center rounded-full bg-[#e9e7ec] text-cocoa"
+				class="flex h-12 w-12 items-center justify-center rounded-full bg-[#e9e7ec] text-cocoa"
 			>
 				<ChevronRight size={20} aria-hidden="true" />
 			</button>

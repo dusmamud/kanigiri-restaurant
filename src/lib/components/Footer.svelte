@@ -14,6 +14,9 @@
 	const about = [
 		{ label: 'Our Story', href: '/about' },
 		{ label: 'Reviews', href: '/reviews' },
+		{ label: 'Gift Cards', href: '/gift-cards' },
+		{ label: 'First Visit', href: '/first-visit' },
+		{ label: 'Accessibility', href: '/accessibility' },
 		{ label: 'FAQ', href: '/faq' },
 		{ label: 'Contact', href: '/contact' },
 		{ label: 'Privacy Policy', href: '/privacy' },
@@ -36,7 +39,7 @@
 		<div class="grid gap-10 text-center md:grid-cols-3 md:text-left">
 			<div class="flex flex-col items-center md:items-start">
 				<Logo />
-				<p class="mt-4 max-w-md text-sm leading-relaxed text-muted">
+				<p class="mt-4 max-w-md text-base leading-relaxed text-muted">
 					{site.address}<br />
 					{site.hours} · <a class="font-semibold text-cocoa underline underline-offset-4" href={site.phoneHref}
 						>{site.phoneDisplay}</a
@@ -48,7 +51,7 @@
 						target="_blank"
 						rel="noopener"
 						aria-label="Kanigiri on Facebook"
-						class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
+						class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
 					>
 						<SocialIcon network="facebook" />
 					</a>
@@ -57,7 +60,7 @@
 						target="_blank"
 						rel="noopener"
 						aria-label="Kanigiri on Pinterest"
-						class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
+						class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
 					>
 						<SocialIcon network="pinterest" />
 					</a>
@@ -66,7 +69,7 @@
 						target="_blank"
 						rel="noopener"
 						aria-label="Kanigiri on X"
-						class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
+						class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
 					>
 						<SocialIcon network="x" />
 					</a>
@@ -75,7 +78,7 @@
 						target="_blank"
 						rel="noopener"
 						aria-label="Kanigiri on Instagram"
-						class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
+						class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-cocoa shadow-sm transition-all duration-200 hover:bg-mango hover:scale-105"
 					>
 						<SocialIcon network="instagram" />
 					</a>
@@ -86,7 +89,7 @@
 				<p class="font-display text-lg font-black text-cocoa">Explore</p>
 				<ul class="mt-3 space-y-2 text-sm font-semibold">
 					{#each explore as link}
-						<li><a href={link.href} class="text-leaf-dark transition-colors hover:text-cocoa">{link.label}</a></li>
+						<li><a href={link.href} class="inline-flex min-h-12 items-center text-leaf-dark transition-colors hover:text-cocoa">{link.label}</a></li>
 					{/each}
 				</ul>
 			</nav>
@@ -95,10 +98,10 @@
 				<p class="font-display text-lg font-black text-cocoa">About & help</p>
 				<ul class="mt-3 space-y-2 text-sm font-semibold">
 					{#each about as link}
-						<li><a href={link.href} class="text-leaf-dark transition-colors hover:text-cocoa">{link.label}</a></li>
+						<li><a href={link.href} class="inline-flex min-h-12 items-center text-leaf-dark transition-colors hover:text-cocoa">{link.label}</a></li>
 					{/each}
 				</ul>
-				<p class="mt-4 text-sm text-muted">
+				<p class="mt-4 text-base text-muted">
 					Also on
 					<a href="https://www.zomato.com/" target="_blank" rel="noopener" class="font-semibold text-cocoa underline underline-offset-4">Zomato</a>
 					·
@@ -110,11 +113,11 @@
 		</div>
 
 		<div class="mt-10 border-t border-line/70 pt-6 text-center">
-			<p class="text-xs leading-relaxed text-muted">
+			<p class="text-sm leading-relaxed text-muted">
 				Return policy (mock): wrong or cold order? Tell us within 30 minutes and we replace it or refund
 				it — no questions asked.
 			</p>
-			<p class="mt-3 text-xs text-muted">
+			<p class="mt-3 text-sm text-muted">
 				Copyright © 2010–2026 Kanigiri Restaurant. All rights reserved. · Mock website for design review.
 			</p>
 		</div>

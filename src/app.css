@@ -29,7 +29,25 @@ html {
 
 body {
 	@apply bg-white font-sans text-ink antialiased;
-	font-size: 1rem;
+	font-size: 1rem; /* 16px base — descriptive copy never goes below this */
+}
+
+/* 48px minimum tap targets for header/footer controls (WCAG 2.2 AA).
+   Component classes carry the explicit heights; this is the backstop for
+   plain links (nav/footer) that have no sizing class of their own. */
+header nav a,
+footer nav a {
+	min-height: 3rem;
+}
+
+/* View Transitions (wired in +layout.svelte via onNavigate): short, subtle,
+   transform/opacity only — and off entirely under prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 250ms;
+		animation-timing-function: ease-out;
+	}
 }
 
 ::selection {

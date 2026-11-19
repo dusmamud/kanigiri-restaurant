@@ -22,7 +22,7 @@
 	);
 
 	function order(item: MenuItem) {
-		addToOrder(item.name, item.price);
+		addToOrder(item.slug);
 		addedName = item.name;
 		window.setTimeout(() => {
 			if (addedName === item.name) addedName = '';
@@ -74,10 +74,10 @@
 		<div class="flex flex-wrap gap-3">
 			{#each dishes as dish (dish.id)}
 				<a
-					href={`/menu/${dish.id}`}
-					class="flex items-center gap-2 rounded-full bg-lavender px-4 py-2 text-sm font-bold text-cocoa transition-colors hover:bg-mango-soft"
+					href={`/menu/${dish.slug}`}
+					class="flex min-h-12 items-center gap-2 rounded-full bg-lavender px-4 py-2 text-sm font-bold text-cocoa transition-colors hover:bg-mango-soft"
 				>
-					{dish.script} {dish.name} · {inr(dish.price)}
+					{dish.name} · {inr(dish.price)}
 				</a>
 			{/each}
 		</div>
@@ -116,7 +116,7 @@
 					type="button"
 					onclick={() => (active = cat)}
 					aria-pressed={active === cat}
-					class="min-h-11 rounded-full px-5 text-sm font-bold transition-colors duration-200 {active === cat
+					class="min-h-12 rounded-full px-5 text-sm font-bold transition-colors duration-200 {active === cat
 						? 'bg-leaf text-white shadow'
 						: 'bg-lavender text-cocoa hover:bg-lavender-deep'}"
 				>
@@ -153,9 +153,7 @@
 											: 'bg-[#a33b1f]'}"
 									></span>
 								</span>
-								<a href={dishes.find((d) => d.name === item.name) ? `/menu/${dishes.find((d) => d.name === item.name)!.id}` : '/menu'} class="hover:text-leaf-dark"
-									>{item.name}</a
-								>
+								<a href={`/menu/${item.slug}`} class="hover:text-leaf-dark">{item.name}</a>
 								<span class="text-xs font-semibold text-muted">· {spiceLabel(item.spice)}</span>
 							</p>
 							<p class="mt-1 text-sm leading-relaxed text-muted">{item.desc}</p>
@@ -169,7 +167,7 @@
 						<button
 							type="button"
 							onclick={() => order(item)}
-							class="flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-4 text-xs font-black tracking-wide uppercase transition-all duration-200 active:scale-95 {addedName ===
+							class="flex min-h-12 shrink-0 items-center gap-1.5 rounded-full px-4 text-xs font-black tracking-wide uppercase transition-all duration-200 active:scale-95 {addedName ===
 							item.name
 								? 'bg-leaf text-white'
 								: 'bg-mango text-cocoa hover:bg-mango-dark hover:text-white'}"

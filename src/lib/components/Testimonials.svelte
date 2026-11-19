@@ -73,8 +73,13 @@
 					aria-selected={selected === i}
 					aria-label={`Go to review ${i + 1}`}
 					onclick={() => emblaApi?.scrollTo?.(i)}
-					class="h-2.5 rounded-full transition-all duration-200 {selected === i ? 'w-7 bg-leaf' : 'w-2.5 bg-line'}"
-				></button>
+					class="flex h-12 w-12 items-center justify-center"
+				>
+					<span
+						class="block h-2.5 rounded-full transition-all duration-200 {selected === i ? 'w-7 bg-leaf' : 'w-2.5 bg-line'}"
+						aria-hidden="true"
+					></span>
+				</button>
 			{/each}
 		</div>
 	</div>

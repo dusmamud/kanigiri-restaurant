@@ -120,25 +120,27 @@
 		</div>
 	</section>
 
-	<!-- Instagram feed -->
+	<!-- Photos from our kitchen (static photo grid — not a live Instagram feed) -->
 	<section class="bg-white py-14 sm:py-16" aria-labelledby="insta-title">
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<div class="flex flex-wrap items-end justify-between gap-4">
 				<div>
 					<p class="font-script text-4xl text-leaf-dark">Follow along</p>
-					<h2 id="insta-title" class="mt-1 font-display text-4xl font-black text-cocoa sm:text-5xl">@kanigiri.eats</h2>
+					<h2 id="insta-title" class="mt-1 font-display text-4xl font-black text-cocoa sm:text-5xl">
+						From our kitchen
+					</h2>
 				</div>
-				<a href="https://www.instagram.com/" target="_blank" rel="noopener" class="font-bold text-leaf-dark underline underline-offset-4">Follow on Instagram →</a>
+				<a
+					href="https://www.instagram.com/"
+					target="_blank"
+					rel="noopener"
+					class="flex min-h-12 items-center font-bold text-leaf-dark underline underline-offset-4"
+					>Follow us on Instagram →</a
+				>
 			</div>
 			<div class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
 				{#each instagramPosts as post}
-					<a
-						href="https://www.instagram.com/"
-						target="_blank"
-						rel="noopener"
-						class="group overflow-hidden rounded-3xl bg-lavender ring-1 ring-line"
-						aria-label={post.caption}
-					>
+					<figure class="overflow-hidden rounded-3xl bg-lavender ring-1 ring-line">
 						<Picture
 							name={post.image}
 							alt={post.alt}
@@ -146,10 +148,12 @@
 							height={360}
 							sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
 							transparent
-							imgClass="aspect-square w-full object-contain p-2 drop-shadow-xl transition-transform duration-300 group-hover:scale-105"
+							imgClass="aspect-square w-full object-contain p-2 drop-shadow-xl"
 						/>
-						<p class="line-clamp-2 bg-white px-3 py-2 text-xs leading-snug text-muted">{post.caption}</p>
-					</a>
+						<figcaption class="line-clamp-2 bg-white px-3 py-2 text-base leading-snug text-muted">
+							{post.caption}
+						</figcaption>
+					</figure>
 				{/each}
 			</div>
 		</div>

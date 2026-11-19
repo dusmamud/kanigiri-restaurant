@@ -21,9 +21,9 @@
 		<circle cx="24" cy="24" r="2.6" fill="#f4f2f8" />
 	</svg>
 	<span class="leading-none">
-		<span class="block font-display text-[1.65rem] font-black tracking-[0.08em] text-cocoa">KANIGIRI</span>
+		<span class="block font-display text-[1.15rem] font-black tracking-[0.08em] text-cocoa sm:text-[1.65rem]">KANIGIRI</span>
 		{#if !compact}
-			<span class="mt-1 block text-[0.6rem] font-semibold tracking-[0.42em] text-leaf-dark"
+			<span class="mt-1 hidden text-[0.6rem] font-semibold tracking-[0.42em] text-leaf-dark sm:block"
 				>TASTE OF ANDHRA</span
 			>
 		{/if}

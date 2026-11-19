@@ -7,8 +7,16 @@
 
 	let { open = $bindable(false) }: { open: boolean } = $props();
 
-	const remaining = $derived(Math.max(0, 499 - cart.subtotal));
-	const progress = $derived(Math.min(100, (cart.subtotal / 499) * 100));
+	const threshold = $derived(cart.freeDeliveryThreshold);
+	// Zone-aware: Kanigiri town is always free (threshold 0), some zones
+	// never get free delivery (threshold null) — never promise free
+	// delivery the zone cannot give.
+	const remaining = $derived(
+		threshold === null ? Infinity : threshold === 0 ? 0 : Math.max(0, threshold - cart.subtotal)
+	);
+	const progress = $derived(
+		threshold === null ? 0 : threshold === 0 ? 100 : Math.min(100, (cart.subtotal / threshold) * 100)
+	);
 </script>
 
 {#if open}
@@ -29,7 +37,7 @@
 					type="button"
 					onclick={() => (open = false)}
 					aria-label="Close cart"
-					class="flex h-11 w-11 items-center justify-center rounded-full text-cocoa hover:bg-lavender"
+					class="flex h-12 w-12 items-center justify-center rounded-full text-cocoa hover:bg-lavender"
 				>
 					<X size={22} aria-hidden="true" />
 				</button>
@@ -49,7 +57,11 @@
 				</div>
 			{:else}
 				<div class="border-b border-line px-5 py-3">
-					{#if remaining > 0}
+					{#if remaining === Infinity}
+						<p class="text-sm font-semibold text-cocoa">
+							Delivery {inr(cart.deliveryFee)} · {cart.zone.area}
+						</p>
+					{:else if remaining > 0}
 						<p class="text-sm font-semibold text-cocoa">Add {inr(remaining)} more for free delivery</p>
 					{:else}
 						<p class="text-sm font-semibold text-leaf-dark">Free delivery unlocked</p>
@@ -72,7 +84,7 @@
 										type="button"
 										onclick={() => setQty(line.name, line.qty - 1)}
 										aria-label={`One less ${line.name}`}
-										class="flex h-9 w-9 items-center justify-center rounded-full text-cocoa"
+										class="flex h-12 w-12 items-center justify-center rounded-full text-cocoa"
 									>
 										<Minus size={15} aria-hidden="true" />
 									</button>
@@ -83,7 +95,7 @@
 										type="button"
 										onclick={() => setQty(line.name, line.qty + 1)}
 										aria-label={`One more ${line.name}`}
-										class="flex h-9 w-9 items-center justify-center rounded-full text-cocoa"
+										class="flex h-12 w-12 items-center justify-center rounded-full text-cocoa"
 									>
 										<Plus size={15} aria-hidden="true" />
 									</button>
@@ -93,7 +105,7 @@
 									type="button"
 									onclick={() => removeLine(line.name)}
 									aria-label={`Remove ${line.name}`}
-									class="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:text-cocoa"
+									class="flex h-12 w-12 items-center justify-center rounded-full text-muted hover:text-cocoa"
 								>
 									<Trash2 size={16} aria-hidden="true" />
 								</button>
@@ -104,7 +116,10 @@
 
 				<div class="space-y-1 border-t border-line px-5 py-4 text-sm">
 					<p class="flex justify-between"><span class="text-muted">Subtotal</span><span class="font-semibold">{inr(cart.subtotal)}</span></p>
-					<p class="flex justify-between"><span class="text-muted">GST (5%)</span><span class="font-semibold">{inr(cart.gst)}</span></p>
+					<p class="flex justify-between text-leaf-dark">
+						<span>Direct-order discount (10% off)</span><span class="font-semibold">− {inr(cart.discount)}</span>
+					</p>
+					<p class="flex justify-between"><span class="text-muted">GST (5% on discounted total)</span><span class="font-semibold">{inr(cart.gst)}</span></p>
 					<p class="flex justify-between">
 						<span class="text-muted">Delivery</span><span class="font-semibold"
 							>{cart.deliveryFee === 0 ? 'Free' : inr(cart.deliveryFee)}</span

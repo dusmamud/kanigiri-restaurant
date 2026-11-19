@@ -3,19 +3,9 @@
 	import Stars from '#lib/components/Stars.svelte';
 	import { allReviews } from '#lib/data/site.ts';
 
-	const aggregate = {
-		'@context': 'https://schema.org',
-		'@type': 'Restaurant',
-		name: 'Kanigiri Restaurant',
-		aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.5', reviewCount: '521' },
-		review: allReviews.map((r) => ({
-			'@type': 'Review',
-			author: { '@type': 'Person', name: r.name },
-			reviewRating: { '@type': 'Rating', ratingValue: String(r.rating) },
-			reviewBody: r.text,
-			datePublished: r.date
-		}))
-	};
+	// No Review/aggregateRating JSON-LD here: Google treats a business rating
+	// itself on its own site as self-serving and ineligible for star rich
+	// results. Reviews stay as visible HTML only.
 </script>
 
 <svelte:head>
@@ -25,8 +15,6 @@
 		content="Kanigiri Restaurant is rated 4.5 stars from 521 reviews. Read what guests say about the mutton biryani, kadai chicken and delivery."
 	/>
 	<link rel="canonical" href="https://kanigiri-restaurant.pages.dev/reviews" />
-	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	{@html `<script type="application/ld+json">${JSON.stringify(aggregate)}</script>`}
 </svelte:head>
 
 <PageHero
@@ -47,7 +35,7 @@
 				href="https://www.google.com/maps/search/Kanigiri+Restaurant"
 				target="_blank"
 				rel="noopener"
-				class="ml-auto flex min-h-11 items-center rounded-full bg-mango px-6 text-xs font-black tracking-wider text-cocoa uppercase"
+				class="ml-auto flex min-h-12 items-center rounded-full bg-mango px-6 text-xs font-black tracking-wider text-cocoa uppercase"
 			>
 				Read all Google reviews
 			</a>

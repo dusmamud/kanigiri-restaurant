@@ -32,7 +32,7 @@
 					type="button"
 					onclick={() => (active = cat)}
 					aria-pressed={active === cat}
-					class="min-h-11 rounded-full px-5 text-sm font-bold transition-colors duration-200 {active === cat
+					class="min-h-12 rounded-full px-5 text-sm font-bold transition-colors duration-200 {active === cat
 						? 'bg-leaf text-white shadow'
 						: 'bg-lavender text-cocoa hover:bg-lavender-deep'}"
 				>
@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-3">
-			{#each visible as item, i (i)}
+			{#each visible as item (item.label)}
 				<figure
 					animate:flip={{ duration: 300 }}
 					in:fly={{ y: 16, duration: 250 }}
@@ -58,13 +58,18 @@
 						transparent
 						imgClass="aspect-[4/3] w-full object-contain p-4 drop-shadow-xl"
 					/>
-					<figcaption class="flex items-center justify-between gap-2 bg-white px-4 py-3">
-						<span class="font-bold text-cocoa">{item.label}</span>
-						<span class="rounded-full bg-mango-soft px-2.5 py-0.5 text-xs font-bold text-cocoa">{item.category}</span>
+					<figcaption class="flex flex-wrap items-center justify-between gap-2 bg-white px-4 py-3">
+						<span class="font-bold break-words text-cocoa">{item.label}</span>
+						<span class="shrink-0 rounded-full bg-mango-soft px-2.5 py-0.5 text-xs font-bold text-cocoa">{item.category}</span>
 					</figcaption>
 				</figure>
 			{/each}
 		</div>
+
+		<p class="mt-8 text-center text-sm text-muted">
+			{gallery.length} real dishes photographed in our kitchen — each photo shown once, under its own name.
+			More photos are added as new dishes are photographed.
+		</p>
 
 		<p class="mt-8 text-center">
 			<a href="/order" class="font-bold text-leaf-dark underline underline-offset-4">Hungry now? Order online →</a>

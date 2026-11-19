@@ -3,15 +3,8 @@
 	import PageHero from '#lib/components/PageHero.svelte';
 	import { faqs } from '#lib/data/site.ts';
 
-	const faqSchema = {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: faqs.map((f) => ({
-			'@type': 'Question',
-			name: f.q,
-			acceptedAnswer: { '@type': 'Answer', text: f.a }
-		}))
-	};
+	// No FAQPage JSON-LD: Google stopped showing FAQ rich results in May 2026.
+	// The visible FAQs stay — they are useful for visitors and AI answers.
 </script>
 
 <svelte:head>
@@ -21,8 +14,6 @@
 		content="Answers to the questions guests actually ask: spice levels, delivery areas, minimum order, bulk orders, veg options, allergens, payment methods and parking."
 	/>
 	<link rel="canonical" href="https://kanigiri-restaurant.pages.dev/faq" />
-	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-	{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`}
 </svelte:head>
 
 <PageHero

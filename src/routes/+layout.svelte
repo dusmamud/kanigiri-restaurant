@@ -12,6 +12,7 @@
 	import Lenis from 'lenis';
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { afterNavigate, onNavigate } from '$app/navigation';
 	import { Phone, ShoppingBag } from '@lucide/svelte';
 	import CartDrawer from '#lib/components/CartDrawer.svelte';
 	import Header from '#lib/components/Header.svelte';
@@ -23,6 +24,12 @@
 
 	let { children } = $props();
 
+	// Restaurant JSON-LD. No aggregateRating: Google treats a business rating
+	// itself on its own site as self-serving and ineligible for star rich
+	// results — stars come from the Google Business Profile, not own-site markup.
+	// No sameAs/hasMap either: no verified social profiles or business-listing
+	// map URL exist yet; generic instagram.com/facebook.com homepages are not
+	// the restaurant's profiles.
 	const jsonLd = {
 		'@context': 'https://schema.org',
 		'@type': 'Restaurant',
@@ -48,12 +55,9 @@
 			opens: '11:00',
 			closes: '22:00'
 		},
-		aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.5', reviewCount: '521' },
 		menu: `${site.url}/menu`,
 		acceptsReservations: 'True',
-		hasMap: 'https://www.google.com/maps/search/Kanigiri+Restaurant',
-		geo: { '@type': 'GeoCoordinates', latitude: 15.65, longitude: 79.35 },
-		sameAs: ['https://www.instagram.com/', 'https://www.facebook.com/']
+		geo: { '@type': 'GeoCoordinates', latitude: 15.65, longitude: 79.35 }
 	};
 
 	// Smooth scroll (Lenis) + GSAP ScrollTrigger, one rAF loop, reduced-motion gated.
@@ -86,16 +90,44 @@
 	});
 
 	// Reveal-on-scroll: transform + opacity only, 300ms, respects reduced motion via CSS.
-	$effect(() => {
-		const els = document.querySelectorAll('.reveal');
-		const io = new IntersectionObserver(
+	// The layout persists across client-side navigation, so the observer must be
+	// re-run after every navigation — otherwise .reveal nodes rendered by a later
+	// page are never observed and stay at opacity: 0.
+	let revealObserver: IntersectionObserver | null = null;
+	function observeReveals() {
+		revealObserver?.disconnect();
+		revealObserver = new IntersectionObserver(
 			(entries) => {
 				for (const e of entries) if (e.isIntersecting) e.target.classList.add('is-visible');
 			},
 			{ threshold: 0.12 }
 		);
-		els.forEach((el) => io.observe(el));
-		return () => io.disconnect();
+		document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => revealObserver!.observe(el));
+	}
+	$effect(() => {
+		observeReveals();
+		return () => revealObserver?.disconnect();
+	});
+	afterNavigate(() => {
+		// Fresh page content is in the DOM by now; observe its .reveal nodes.
+		// Skip scroll-to-top for in-page anchor jumps (e.g. #reviews).
+		if (!window.location.hash) window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+		observeReveals();
+		ScrollTrigger.refresh();
+	});
+
+	// View Transitions on route changes, gated on prefers-reduced-motion.
+	// Never put a GSAP from() opacity tween on an element that also has the
+	// .reveal class — the inline opacity: 0 beats .reveal.is-visible.
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		return new Promise<void>((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
 	});
 </script>
 
@@ -113,7 +145,13 @@
 		content="Mutton Biryani ₹360, Kadai Chicken, Palak Paneer and more — fresh Andhra food, delivered hot."
 	/>
 	<meta property="og:url" content={site.url} />
+	<meta property="og:image" content="https://kanigiri-restaurant.pages.dev/images/mutton-biryani-transparent-1200.png" />
+	<meta property="og:image:alt" content="Mutton biryani served at Kanigiri Restaurant" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="800" />
 	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="https://kanigiri-restaurant.pages.dev/images/mutton-biryani-transparent-1200.png" />
+	<meta name="twitter:image:alt" content="Mutton biryani served at Kanigiri Restaurant" />
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`}
 </svelte:head>
